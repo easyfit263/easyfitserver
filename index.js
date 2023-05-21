@@ -1491,10 +1491,11 @@ app.post('/addcourse', (req, res) => {
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
- host: "localhost",
-    user: "root",
-    password: "",
-    database: "easyfit"});
+  host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+  user: "u6mrp0q6gavsuo3y",
+  password: "BZpgvyXhFUPP21YbYUUR",
+  database: "bsfwn0d48k1k4wkxc8lx", 
+});
 const auth=0;
 con.connect(function(err) {
   if (err) throw err;
@@ -1538,10 +1539,10 @@ const u=req.body.id.name
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
-host: "localhost",
-   user: "root",
-   password: "",
-   database: "easyfit"});
+host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",});
 const auth=0;
 con.connect(function(err) {
 if (err) throw err;
