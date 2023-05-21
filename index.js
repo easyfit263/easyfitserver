@@ -1011,7 +1011,7 @@ app.get("/dailyCalories", (req, res) => {
 
 app.post("/dailyCalories", (req, res) => {
   const n = req.body.email;
-  var date = req.body.formattedDate;
+  var date1 = req.body.formattedDate;
 
    
    const date = new Date(); // Get the current date
@@ -1021,7 +1021,7 @@ const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the current m
 const day = String(date.getDate()).padStart(2, '0'); // Get the current day
 
 const formattedDate = `${year}-${month}-${day}`; // Format the date as YYYY-MM-DD
-date=formattedDate;
+date1=formattedDate;
    
    
    
@@ -1046,7 +1046,7 @@ date=formattedDate;
       "SELECT email, date, achievedcal, achievedprots, achievedcarbs, achievedfats FROM daily_calories WHERE email = '" +
       n +
       "' AND date = '" +
-      date +
+      date1 +
       "';";
 
     con.query(sql, function (err, result) {
