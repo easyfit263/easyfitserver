@@ -64,6 +64,96 @@ app.post("/addtologin", (req, res) => {
   res.send("USER ADDED");
 });
 
+
+app.get("/Traineraddtologin", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
+app.post("/Traineraddtologin", (req, res) => {
+  const n = req.body.data.email;
+  const p = req.body.data.password;
+
+  // console.log("DATA RECEIVED "+ n);
+
+  // SQL STARTS
+
+  var mysql = require("mysql");
+
+  var con = mysql.createConnection({
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",
+  });
+
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+    // var sql = "INSERT INTO details (username, name,age, gender, interests, phoneno, country, maritalstat, work, prefferedage, city, religion, caste, height, description, hobbies) VALUES ('pathan77', ' "+a+" ', '', '', '', '', '', '', '', '', '', '', '', '', '','')";
+    var sql =
+      "INSERT INTO trainerlogin (email,password) VALUES ('" +
+      n +
+      "' ,'" +
+      p +
+      "'" +
+      ")";
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      // console.log(result[1].name);
+      // con.end();
+    });
+    con.end();
+  });
+
+  // SQL ENDS
+
+  res.send("USER ADDED");
+});
+
+app.get("/trainercheckcredentials", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
+app.post("/trainercheckcredentials", (req, res) => {
+  const n = req.body.data1.email;
+  const p = req.body.data1.password;
+
+  // console.log("DATA RECEIVED "+ n);
+
+  // SQL STARTS
+
+  var mysql = require("mysql");
+
+  var con = mysql.createConnection({
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",
+  });
+  const auth = 0;
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+    // var sql = "INSERT INTO details (username, name,age, gender, interests, phoneno, country, maritalstat, work, prefferedage, city, religion, caste, height, description, hobbies) VALUES ('pathan77', ' "+a+" ', '', '', '', '', '', '', '', '', '', '', '', '', '','')";
+    var sql =
+      "SELECT * FROM trainerlogin WHERE email= '" + n + "' AND password='" + p + "'";
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      if (result.length > 0) {
+        res.send("1");
+        con.end();
+      } else {
+        res.send("0");
+        con.end();
+      }
+      // console.log(result[1].name);
+    });
+  });
+});
+
+
 // CHECK CREDENTIALS
 
 app.get("/checkcredentials", (req, res) => {
@@ -168,10 +258,10 @@ app.post("/userSignupdemail", (req, res) => {
   var mysql = require("mysql");
 
   var con = mysql.createConnection({
-    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
-    user: "u6mrp0q6gavsuo3y",
-    password: "BZpgvyXhFUPP21YbYUUR",
-    database: "bsfwn0d48k1k4wkxc8lx",
+    host: "127.0.0.1",
+    user: "root",
+    password: "",
+    database: "easyfit",
   });
   const auth = 0;
   con.connect(function (err) {
@@ -183,7 +273,50 @@ app.post("/userSignupdemail", (req, res) => {
     con.query(sql, (error, results) => {
       if (error) {
         console.error("Error executing the query:", error);
-        connection.end(); // Close the database connection
+        con.end(); // Close the database connection
+        return;
+      }
+
+      // Process the results
+      if (results.length > 0) {
+        res.send("1")
+        con.end();
+      } else {
+        res.send("0");
+        con.end();
+      }
+    });
+  });
+});
+
+app.get("/TuserSignupdemail", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
+app.post("/TuserSignupdemail", (req, res) => {
+  const email = req.body.data1.email;
+  // console.log("SScard"+ trainerid);
+
+  var mysql = require("mysql");
+
+  var con = mysql.createConnection({
+    host: "127.0.0.1",
+    user: "root",
+    password: "",
+    database: "easyfit",
+  });
+  const auth = 0;
+  con.connect(function (err) {
+    if (err) throw err;
+    // console.log(JSON.stringify(data1));
+    console.log("Connected!  trainerdetails");
+    const sql =
+      "SELECT email FROM trainerlogin WHERE email = '" + email + "';";
+    con.query(sql, (error, results) => {
+      if (error) {
+        console.error("Error executing the query:", error);
+        con.end(); // Close the database connection
         return;
       }
 
@@ -534,61 +667,7 @@ app.post("/addrecentmeals", (req, res) => {
   // SQL ENDS
 });
 
-// app.get("/addcalories", (req, res) => {
-//   res.send("This is the data endpoint");
-//   console.log("Received data:");
-// });
 
-// app.post("/addcalories", (req, res) => {
-//   const n1 = req.body.data2.email;
-//   const n2 = req.body.data2.totalcals;
-//   const n3 = req.body.data2.totalprots;
-//   const n4 = req.body.data2.totalcarbs;
-//   const n5 = req.body.data2.totalfats;
-  
-
-//   console.log("DATA RECEIVED " + req.body.data2.email);
-
-//   // SQL STARTS
-
-//   var mysql = require("mysql");
-
-//   var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "easyfit",
-//   });
-//   const auth = 0;
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-
-//     var sql = `INSERT INTO daily_totalcals (email, totalcalories, totalproteins, totalcarbs, totalfats) 
-//     VALUES ('${n1}', '${n2}', '${n3}', '${n4}', '${n5}')
-//     ON DUPLICATE KEY UPDATE
-//     totalcalories = VALUES(totalcalories),
-//     totalproteins = VALUES(totalproteins),
-//     totalcarbs = VALUES(totalcarbs),
-//     totalfats = VALUES(totalfats);`;
-
-//     con.query(sql, function (err, result) {
-//       if (err) {
-//         console.log(err);
-//         res.send(err);
-//         con.end();
-//       } else {
-//         res.send("Calories Details Added");
-//         console.log("Calories Added");
-//         con.end();
-//       }
-
-//       // con.end()
-//     });
-//   });
-
-//   // SQL ENDS
-// });
 
 app.get("/addData", (req, res) => {
   res.send("This is the data endpoint");
@@ -604,7 +683,7 @@ app.post("/addData", (req, res) => {
   var mysql = require("mysql");
 
   var con = mysql.createConnection({
-   host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
     user: "u6mrp0q6gavsuo3y",
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
@@ -628,31 +707,31 @@ app.post("/addData", (req, res) => {
       `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories) 
       VALUES ('${weeklyData.email}', '${weeklyData.date}', ${weeklyData.targweeklycal}, ${weeklyData.achCals})
       ON DUPLICATE KEY UPDATE
-      total_calories =  VALUES(total_calories),
-      achieved_calories = achieved_calories + ${weeklyData.achCals};
-      `;
+      total_calories =  VALUES(total_calories);`;
 
     // Insert or update monthly data
     var monthlySql =
       `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories) 
       VALUES ('${monthlyData.email}', '${monthlyData.date}', ${monthlyData.targetmonthlycal}, ${monthlyData.achCals})
       ON DUPLICATE KEY UPDATE
-      total_calories = VALUES(total_calories),
-      achieved_calories = achieved_calories + ${monthlyData.achCals};`;
+      total_calories = VALUES(total_calories);`;
 
     con.query(dailySql, function (err, result) {
       if (err) throw err;
       console.log("Daily Calories Added/Updated");
+      con.end();
     });
 
     con.query(weeklySql, function (err, result) {
       if (err) throw err;
       console.log("Weekly Calories Added/Updated");
+      con.end();
     });
 
     con.query(monthlySql, function (err, result) {
       if (err) throw err;
       console.log("Monthly Calories Added/Updated");
+      con.end();
     });
 
     res.send("Calories Details Added/Updated");
@@ -672,7 +751,7 @@ app.post("/addData2", (req, res) => {
   var mysql = require("mysql");
 
   var con = mysql.createConnection({
-   host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
     user: "u6mrp0q6gavsuo3y",
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
@@ -750,166 +829,6 @@ app.post("/addData2", (req, res) => {
         });
       });
     });
-
-
-// app.get("/addcurrentcals", (req, res) => {
-//   res.send("This is the data endpoint");
-//   console.log("Received data:");
-// });
-
-// app.post("/addcurrentcals", (req, res) => {
-//   const { data1, data2, data3 } = req.body;
-
-//   // console.log("DATA RECEIVED " + req.body.data1.achweekly);
-
-//   // SQL STARTS
-
-//   var mysql = require("mysql");
-
-//   var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "easyfit",
-//   });
-//   const auth = 0;
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-
-//     var sql = `INSERT INTO daily_calories (email, date, calories, achievedprots, achievedcarbs, achievedfats)
-//     VALUES ('${n1}', '${n6}', '${n2}', '${n3}', '${n4}', '${n5}')
-//     ON DUPLICATE KEY UPDATE
-//     calories = VALUES(calories),
-//     achievedprots = VALUES(achievedprots),
-//     achievedcarbs = VALUES(achievedcarbs),
-//     achievedfats = VALUES(achievedfats);`;
-
-//     con.query(sql, function (err, result) {
-//       if (err) {
-//         console.log(err);
-//         res.send(err);
-//         con.end();
-//       } else {
-//         res.send("Calories Details Added");
-//         console.log("Current Calories Added");
-//         con.end();
-//       }
-
-//       // con.end()
-//     });
-//   });
-
-//   // SQL ENDS
-// });
-
-
-// app.get("/addweeklycals", (req, res) => {
-//   res.send("This is the data endpoint");
-//   console.log("Received data:");
-// });
-
-// app.post("/addweeklycals", (req, res) => {
-//   const n1 = req.body.data2.email;
-//   const n2 = req.body.data2.date;
-//   const n3 = req.body.data2.totWcals;
-//   const n4 = req.body.data2.achWcals;
- 
-
-//   // console.log("DATA RECEIVED " + req.body.data1.achweekly);
-
-//   // SQL STARTS
-
-//   var mysql = require("mysql");
-
-//   var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "easyfit",
-//   });
-//   const auth = 0;
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-
-//     var sql = "INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories) " +
-//   "VALUES ('" + n1 + "', '" + n2 + "', " + n3 + ", " + n4 + ") " +
-//   "ON DUPLICATE KEY UPDATE " +
-//   "total_calories = VALUES(total_calories), " +
-//   "achieved_calories = VALUES(achieved_calories);";
-
-//     con.query(sql, function (err, result) {
-//       if (err) {
-//         console.log(err);
-//         res.send(err);
-//         con.end();
-//       } else {
-//         res.send("Calories Details Added");
-//         console.log("Current Calories Added");
-//         con.end();
-//       }
-
-//       // con.end()
-//     });
-//   });
-
-//   // SQL ENDS
-// });
-
-
-// app.get("/addmonthlycals", (req, res) => {
-//   res.send("This is the data endpoint");
-//   console.log("Received data:");
-// });
-
-// app.post("/addmonthlycals", (req, res) => {
-//   const n1 = req.body.data3.email;
-//   const n2 = req.body.data3.date;
-//   const n3 = req.body.data3.totMcals;
-//   const n4 = req.body.data3.achMcals;
- 
-
-//   // console.log("DATA RECEIVED " + req.body.data1.achweekly);
-
-//   // SQL STARTS
-
-//   var mysql = require("mysql");
-
-//   var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "easyfit",
-//   });
-//   const auth = 0;
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-
-//     var sql = "INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories) " +
-//   "VALUES ('" + n1 + "', '" + n2 + "', " + n3 + ", " + n4 + ") " +
-//   "ON DUPLICATE KEY UPDATE " +
-//   "total_calories = VALUES(total_calories), " +
-//   "achieved_calories = VALUES(achieved_calories);";
-
-//     con.query(sql, function (err, result) {
-//       if (err) {
-//         console.log(err);
-//         res.send(err);
-//         con.end();
-//       } else {
-//         res.send("Calories Details Added");
-//         console.log("Current Calories Added");
-//         con.end();
-//       }
-
-//       // con.end()
-//     });
-//   });
-
-//   // SQL ENDS
-// });
 
 
 
@@ -1115,61 +1034,6 @@ app.post("/monthlyCalories", (req, res) => {
 
 
 
-// app.get("/AddmonthlyCalories", (req, res) => {
-//   res.send("This is the data endpoint");
-//   console.log("Received data:");
-// });
-
-// app.post("/AddmonthlyCalories", (req, res) => {
-//   var n =  req.body.data3.email;
-//   var monthStartDate = req.body.data3.date;
-//   var totalCalories = req.body.data3.targetmonthlycal;
-//   var achievedCalories = req.body.data3.achCals;
-
-//   var mysql = require("mysql");
-
-//   var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "easyfit",
-//   });
-//   const auth = 0;
-//   con.connect(function (err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-
-//     // var sql = "SELECT * FROM dailycalories WHERE email ='" + n + "';";
-//     var sql =
-//       "INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories) " +
-//       "VALUES ('" +
-//       n +
-//       "', '" +
-//       monthStartDate +
-//       "', " +
-//       totalCalories +
-//       ", " +
-//       achievedCalories +
-//       ") " +
-//       "ON DUPLICATE KEY UPDATE " +
-//       "total_calories = VALUES(total_calories), " +
-//       "achieved_calories = VALUES(achieved_calories);";
-
-//     con.query(sql, function (err, result) {
-//       if (err) throw err;
-//       if (result.length > 0) {
-//         console.log("server:" + result);
-//         res.json(result);
-//         con.end();
-//         console.log('monthly');
-//       } else {
-//         res.send("0");
-//         con.end();
-//       }
-//       // console.log(result[1].name);
-//     });
-//   });
-// });
 
 
 app.get("/loadchats", (req, res) => {
@@ -1632,6 +1496,74 @@ app.post("/delcourse", (req, res) => {
   });
 });
 
+
+
+
+
+
+
+
+
+
+
+app.get("/updatedata", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
+
+app.post("/updatedata", (req, res) => {
+  const trainerId = req.body.update.username;
+  const description = req.body.update.d;
+  const profilePicUrl = req.body.update.pp;
+
+  // SQL STARTS
+  var mysql = require("mysql");
+
+  var con = mysql.createConnection({
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",
+  });
+
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected! Update data");
+
+    if (trainerId && (description || profilePicUrl)) {
+      var updateSql = "UPDATE trainers SET";
+      var params = [];
+
+      if (description) {
+        updateSql += " description = ?";
+        params.push(description);
+      }
+
+      if (profilePicUrl) {
+        if (description) updateSql += ",";
+        updateSql += " profile_pic_url = ?";
+        params.push(profilePicUrl);
+      }
+
+      updateSql += " WHERE trainer_id = ?";
+      params.push(trainerId);
+
+      con.query(updateSql, params, function (err, result) {
+        if (err) throw err;
+        console.log("Trainer details updated successfully");
+      });
+    }
+
+    con.end();
+  });
+});
+
+
+
+
+
+
 app.listen(3000, () => {
-  console.log("Server started on port 3000");
+  console.log("Server started on port 3000");
 });
