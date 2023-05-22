@@ -1554,15 +1554,7 @@ console.log("tr"+trainerId+"  "+description+"  "+profilePicUrl );
 
 
 
-  
-
-
-
-
-
-
-
-
+ 
 
 
 
