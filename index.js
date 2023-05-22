@@ -1511,7 +1511,6 @@ app.get("/updatedata", (req, res) => {
   console.log("Received data:");
 });
 
-
 app.post("/updatedata", (req, res) => {
   const trainerId = req.body.update.username;
   const description = req.body.update.d;
@@ -1532,7 +1531,7 @@ app.post("/updatedata", (req, res) => {
     console.log("Connected! Update data");
 
     if (trainerId && (description || profilePicUrl)) {
-      var updateSql = "UPDATE trainers SET";
+      var updateSql = "UPDATE trainersdetails SET";
       var params = [];
 
       if (description) {
@@ -1542,17 +1541,26 @@ app.post("/updatedata", (req, res) => {
 
       if (profilePicUrl) {
         if (description) updateSql += ",";
-        updateSql += " profile_pic_url = ?";
+        updateSql += " profilepic = ?";
         params.push(profilePicUrl);
       }
 
-      updateSql += " WHERE trainer_id = ?";
+      updateSql += " WHERE trainerid = ?";
       params.push(trainerId);
 
       con.query(updateSql, params, function (err, result) {
         if (err) throw err;
         console.log("Trainer details updated successfully");
       });
+
+      // Update profilepic in courses table
+      if (profilePicUrl) {
+        var updateCoursesSql = "UPDATE courses SET trainerpic = ? WHERE trainerid = ?";
+        con.query(updateCoursesSql, [profilePicUrl, trainerId], function (err, result) {
+          if (err) throw err;
+          console.log("Profile picture updated in courses table");
+        });
+      }
     }
 
     con.end();
