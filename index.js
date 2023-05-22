@@ -611,7 +611,7 @@ app.post("/addtrainerdetails", (req, res) => {
       }
 
       // console.log(result[1].name);
-      con.end()
+      
     });
   });
 
@@ -658,7 +658,7 @@ app.post("/addrecentmeals", (req, res) => {
         con.end();
       }
 
-      con.end()
+      
     });
   });
 
@@ -852,7 +852,7 @@ app.post("/totalCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+      
     });
   });
 });
@@ -903,7 +903,7 @@ app.post("/weeklyCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+      
     });
   });
 });
@@ -963,7 +963,7 @@ date1=formattedDate;
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+      
     });
   });
 });
@@ -1013,7 +1013,7 @@ app.post("/monthlyCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+     
     });
   });
 });
@@ -1187,7 +1187,7 @@ app.post("/TdashName", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+     
     });
   });
 });
@@ -1266,7 +1266,7 @@ app.post("/displaycourse", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+     
     });
   });
 });
@@ -1306,7 +1306,7 @@ app.post("/recentmeals", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
-      con.end();
+      
     });
   });
 });
