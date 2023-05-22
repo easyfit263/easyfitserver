@@ -1549,7 +1549,10 @@ app.post("/updatedata", (req, res) => {
       params.push(trainerId);
 
       con.query(updateSql, params, function (err, result) {
-        if (err) throw err;
+        if (err) {
+con.end()
+res.send('0')
+        }
         console.log("Trainer details updated successfully");
       });
 
@@ -1557,8 +1560,12 @@ app.post("/updatedata", (req, res) => {
       if (profilePicUrl) {
         var updateCoursesSql = "UPDATE courses SET trainerpic = ? WHERE trainerid = ?";
         con.query(updateCoursesSql, [profilePicUrl, trainerId], function (err, result) {
-          if (err) throw err;
+          if (err) {
+            con.end()
+            res.send('0')
+                    }
           console.log("Profile picture updated in courses table");
+          res.send('1');
         });
       }
     }
