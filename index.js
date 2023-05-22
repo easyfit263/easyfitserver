@@ -1515,7 +1515,7 @@ app.post("/updatedata", (req, res) => {
   const trainerId = req.body.update.username;
   const description = req.body.update.d;
   const profilePicUrl = req.body.update.pp;
-
+console.log("tr"+trainerId+"  "+description+"  "+profilePicUrl );
   // SQL STARTS
   var mysql = require("mysql");
 
@@ -1551,6 +1551,17 @@ app.post("/updatedata", (req, res) => {
     });
   });
 });
+
+
+
+  
+
+
+
+
+
+
+
 
 
 
