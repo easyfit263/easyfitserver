@@ -1550,6 +1550,8 @@ app.post("/updatedata", (req, res) => {
 
       con.query(updateSql, params, function (err, result) {
         if (err) {
+          
+          console.log("ERROR ON ADD DATA "+err);
 con.end()
 res.send('0')
         }
@@ -1561,6 +1563,7 @@ res.send('0')
         var updateCoursesSql = "UPDATE courses SET trainerpic = ? WHERE trainerid = ?";
         con.query(updateCoursesSql, [profilePicUrl, trainerId], function (err, result) {
           if (err) {
+            console.log("ERROR ON ADD DATA COURSES "+err);
             con.end()
             res.send('0')
                     }
