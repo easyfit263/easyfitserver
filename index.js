@@ -1529,52 +1529,50 @@ app.post("/updatedata", (req, res) => {
   con.connect(function (err) {
     if (err) throw err;
     console.log("Connected! Update data");
+    var sql ="UPDATE trainerdetails SET description='"+description+"',profilepic='"+profilePicUrl+"' WHERE trainerid='" +trainerId+"';";
+   con.query(sql, function (err, result) {
+    if (err) {
 
-    if (trainerId && (description || profilePicUrl)) {
-      var updateSql = "UPDATE trainersdetails SET";
-      var params = [];
 
-      if (description) {
-        updateSql += " description = ?";
-        params.push(description);
-      }
-
-      if (profilePicUrl) {
-        if (description) updateSql += ",";
-        updateSql += " profilepic = ?";
-        params.push(profilePicUrl);
-      }
-
-      updateSql += " WHERE trainerid = ?";
-      params.push(trainerId);
-
-      con.query(updateSql, params, function (err, result) {
-        if (err) {
-          
-          console.log("ERROR ON ADD DATA "+err);
-con.end()
-res.send('0')
-        }
-        console.log("Trainer details updated successfully");
-      });
-
-      // Update profilepic in courses table
-      if (profilePicUrl) {
-        var updateCoursesSql = "UPDATE courses SET trainerpic = ? WHERE trainerid = ?";
-        con.query(updateCoursesSql, [profilePicUrl, trainerId], function (err, result) {
-          if (err) {
-            console.log("ERROR ON ADD DATA COURSES "+err);
-            con.end()
-            res.send('0')
-                    }
-          console.log("Profile picture updated in courses table");
-          res.send('1');
-        });
-      }
+      con.end();
+    } else {
+      con.end();
     }
-
-    con.end();
+    // console.log(result[1].name);
   });
+
+  var con = mysql.createConnection({
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",
+  });
+
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected! Update data");
+    var sql ="UPDATE courses SET trainerpic='"+profilePicUrl+"' WHERE trainerid='" +trainerId+"';";
+   con.query(sql, function (err, result) {
+    if (err) {
+      res.send("0");
+
+      con.end();
+    } else {
+      res.send("1");
+      con.end();
+    }
+    console.log("UPDATED DATA IN BOTH TABLES");
+  });
+   
+    
+  });
+
+
+    
+  });
+
+
+
 });
 
 
