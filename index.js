@@ -262,8 +262,7 @@ app.post("/userSignupdemail", (req, res) => {
     user: "u6mrp0q6gavsuo3y",
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
-  });
-  const auth = 0;
+  });  const auth = 0;
   con.connect(function (err) {
     if (err) throw err;
     // console.log(JSON.stringify(data1));
@@ -305,8 +304,7 @@ app.post("/TuserSignupdemail", (req, res) => {
     user: "u6mrp0q6gavsuo3y",
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
-  });
-  const auth = 0;
+  });  const auth = 0;
   con.connect(function (err) {
     if (err) throw err;
     // console.log(JSON.stringify(data1));
@@ -539,7 +537,7 @@ app.post("/adddetails", (req, res) => {
       }
 
       // console.log(result[1].name);
-      // con.end()
+      con.end()
     });
   });
 
@@ -613,7 +611,7 @@ app.post("/addtrainerdetails", (req, res) => {
       }
 
       // console.log(result[1].name);
-      // con.end()
+      con.end()
     });
   });
 
@@ -660,7 +658,7 @@ app.post("/addrecentmeals", (req, res) => {
         con.end();
       }
 
-      // con.end()
+      con.end()
     });
   });
 
@@ -739,14 +737,8 @@ app.post("/addData", (req, res) => {
   });
 });
 
-app.get("/addData2", (req, res) => {
-  res.send("This is the data endpoint");
-  console.log("Received data:");
-});
-
 app.post("/addData2", (req, res) => {
   const { data1, data2, data3 } = req.body;
-
 
   var mysql = require("mysql");
 
@@ -756,79 +748,70 @@ app.post("/addData2", (req, res) => {
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
   });
-
   con.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
 
-       // Add daily calories
-       const { email: email1, date: date1, achcals, achprots, achcarbs, achfats } = data1;
-       const dailySql = `INSERT INTO daily_calories (email, date, achievedcal, achievedprots, achievedcarbs, achievedfats)
-                         VALUES ('${email1}', '${date1}', ${achcals}, ${achprots}, ${achcarbs}, ${achfats})
-                         ON DUPLICATE KEY UPDATE
-                         achievedcal = VALUES(achievedcal),
-                         achievedprots = VALUES(achievedprots),
-                         achievedcarbs = VALUES(achievedcarbs),
-                         achievedfats = VALUES(achievedfats);`;
-   
-       con.query(dailySql, (err, result) => {
-         if (err) {
-           console.error("Error adding daily calories: ", err);
-           res.status(500).send("Internal server error");
-           con.end();
-           return;
-         }
-         console.log("Daily calories added");
-   
-         // Add weekly calories
-         const { email: email2, date: date2, totWcals, achWcals } = data2;
-        //  const weeklySql = `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories)
-        //                     VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
-        //                     ON DUPLICATE KEY UPDATE
-        //                     total_calories = VALUES(total_calories),
-        //                     achieved_calories = VALUES(achieved_calories);`;
+    // Add daily calories
+    const { email: email1, date: date1, achcals, achprots, achcarbs, achfats } = data1;
+    const dailySql = `INSERT INTO daily_calories (email, date, achievedcal, achievedprots, achievedcarbs, achievedfats)
+                      VALUES ('${email1}', '${date1}', ${achcals}, ${achprots}, ${achcarbs}, ${achfats})
+                      ON DUPLICATE KEY UPDATE
+                      achievedcal = VALUES(achievedcal),
+                      achievedprots = VALUES(achievedprots),
+                      achievedcarbs = VALUES(achievedcarbs),
+                      achievedfats = VALUES(achievedfats);`;
 
-                            const weeklySql =
-                            `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories) 
-                            VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
+    con.query(dailySql, (err, result) => {
+      if (err) {
+        console.error("Error adding daily calories: ", err);
+        res.status(500).send("Internal server error");
+        con.end(); // Close the connection on error
+        return;
+      }
+      console.log("Daily calories added");
+
+      // Add weekly calories
+      const { email: email2, date: date2, totWcals, achWcals } = data2;
+      const weeklySql = `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories)
+                         VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
+                         ON DUPLICATE KEY UPDATE
+                         total_calories = VALUES(total_calories),
+                         achieved_calories = achieved_calories + ${achWcals};`;
+
+      con.query(weeklySql, (err, result) => {
+        if (err) {
+          console.error("Error adding weekly calories: ", err);
+          res.status(500).send("Internal server error");
+          con.end(); // Close the connection on error
+          return;
+        }
+        console.log("Weekly calories added");
+
+        // Add monthly calories
+        const { email: email3, date: date3, totMcals, achMcals } = data3;
+        const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
+                            VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
                             ON DUPLICATE KEY UPDATE
-                            total_calories =  VALUES(total_calories),
-                            achieved_calories = achieved_calories + ${achWcals};
-                            `;
-   
-         con.query(weeklySql, (err, result) => {
-           if (err) {
-             console.error("Error adding weekly calories: ", err);
-             res.status(500).send("Internal server error");
-             con.end();
-             return;
-           }
-           console.log("Weekly calories added");
-   
-           // Add monthly calories
-           const { email: email3, date: date3, totMcals, achMcals } = data3;
-           const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
-                               VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
-                               ON DUPLICATE KEY UPDATE
-                               total_calories = VALUES(total_calories),
-                               achieved_calories = achieved_calories + ${achMcals}`;
-   
-           con.query(monthlySql, (err, result) => {
-             if (err) {
-               console.error("Error adding monthly calories: ", err);
-               res.status(500).send("Internal server error");
-               con.end();
-               return;
-             }
-             console.log("Monthly calories added");
-   
-             res.send("Calories details added");
-             con.end();
-            });
-          });
+                            total_calories = VALUES(total_calories),
+                            achieved_calories = achieved_calories + ${achMcals}`;
+
+        con.query(monthlySql, (err, result) => {
+          if (err) {
+            console.error("Error adding monthly calories: ", err);
+            res.status(500).send("Internal server error");
+            con.end(); // Close the connection on error
+            return;
+          }
+          console.log("Monthly calories added");
+
+          res.send("Calories details added");
+          con.end(); // Close the connection after all queries have completed
         });
       });
     });
+  });
+});
 
 
 
@@ -869,6 +852,7 @@ app.post("/totalCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -919,6 +903,7 @@ app.post("/weeklyCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -950,12 +935,11 @@ date1=formattedDate;
   var mysql = require("mysql");
 
   var con = mysql.createConnection({
-   host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
     user: "u6mrp0q6gavsuo3y",
     password: "BZpgvyXhFUPP21YbYUUR",
     database: "bsfwn0d48k1k4wkxc8lx",
-  });
-  const auth = 0;
+  });  const auth = 0;
   con.connect(function (err) {
     if (err) throw err;
     console.log("Connected!");
@@ -979,6 +963,7 @@ date1=formattedDate;
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -1028,6 +1013,7 @@ app.post("/monthlyCalories", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -1201,6 +1187,7 @@ app.post("/TdashName", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -1279,6 +1266,7 @@ app.post("/displaycourse", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -1318,6 +1306,7 @@ app.post("/recentmeals", (req, res) => {
         con.end();
       }
       // console.log(result[1].name);
+      con.end();
     });
   });
 });
@@ -1496,16 +1485,6 @@ app.post("/delcourse", (req, res) => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
 app.get("/updatedata", (req, res) => {
   res.send("This is the data endpoint");
   console.log("Received data:");
@@ -1551,9 +1530,6 @@ app.post("/updatedata", (req, res) => {
     });
   });
 });
-
-
-
 
 
 app.listen(3000, () => {
