@@ -1512,7 +1512,7 @@ app.get("/updatedata", (req, res) => {
 });
 
 app.post("/updatedata", (req, res) => {
-  const trainerId = req.body.update.username;
+  const trainerId = req.body.update.user;
   const description = req.body.update.d;
   const profilePicUrl = req.body.update.pp;
 console.log("tr"+trainerId+"  "+description+"  "+profilePicUrl );
