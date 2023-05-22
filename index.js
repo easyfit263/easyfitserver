@@ -668,7 +668,6 @@ app.post("/addrecentmeals", (req, res) => {
 });
 
 
-
 app.get("/addData", (req, res) => {
   res.send("This is the data endpoint");
   console.log("Received data:");
@@ -719,25 +718,25 @@ app.post("/addData", (req, res) => {
     con.query(dailySql, function (err, result) {
       if (err) throw err;
       console.log("Daily Calories Added/Updated");
-      con.end();
+      con.end(); // Close the connection after query execution
     });
 
     con.query(weeklySql, function (err, result) {
       if (err) throw err;
       console.log("Weekly Calories Added/Updated");
-      con.end();
+      con.end(); // Close the connection after query execution
     });
 
     con.query(monthlySql, function (err, result) {
       if (err) throw err;
       console.log("Monthly Calories Added/Updated");
-      con.end();
+      con.end(); // Close the connection after query execution
     });
 
     res.send("Calories Details Added/Updated");
-    con.end();
   });
 });
+
 
 app.get("/addData2", (req, res) => {
   res.send("This is the data endpoint");
@@ -746,7 +745,6 @@ app.get("/addData2", (req, res) => {
 
 app.post("/addData2", (req, res) => {
   const { data1, data2, data3 } = req.body;
-
 
   var mysql = require("mysql");
 
@@ -761,74 +759,75 @@ app.post("/addData2", (req, res) => {
     if (err) throw err;
     console.log("Connected!");
 
-       // Add daily calories
-       const { email: email1, date: date1, achcals, achprots, achcarbs, achfats } = data1;
-       const dailySql = `INSERT INTO daily_calories (email, date, achievedcal, achievedprots, achievedcarbs, achievedfats)
-                         VALUES ('${email1}', '${date1}', ${achcals}, ${achprots}, ${achcarbs}, ${achfats})
-                         ON DUPLICATE KEY UPDATE
-                         achievedcal = VALUES(achievedcal),
-                         achievedprots = VALUES(achievedprots),
-                         achievedcarbs = VALUES(achievedcarbs),
-                         achievedfats = VALUES(achievedfats);`;
-   
-       con.query(dailySql, (err, result) => {
-         if (err) {
-           console.error("Error adding daily calories: ", err);
-           res.status(500).send("Internal server error");
-           con.end();
-           return;
-         }
-         console.log("Daily calories added");
-   
-         // Add weekly calories
-         const { email: email2, date: date2, totWcals, achWcals } = data2;
-        //  const weeklySql = `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories)
-        //                     VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
-        //                     ON DUPLICATE KEY UPDATE
-        //                     total_calories = VALUES(total_calories),
-        //                     achieved_calories = VALUES(achieved_calories);`;
+    // Add daily calories
+    const { email: email1, date: date1, achcals, achprots, achcarbs, achfats } = data1;
+    const dailySql = `INSERT INTO daily_calories (email, date, achievedcal, achievedprots, achievedcarbs, achievedfats)
+                      VALUES ('${email1}', '${date1}', ${achcals}, ${achprots}, ${achcarbs}, ${achfats})
+                      ON DUPLICATE KEY UPDATE
+                      achievedcal = VALUES(achievedcal),
+                      achievedprots = VALUES(achievedprots),
+                      achievedcarbs = VALUES(achievedcarbs),
+                      achievedfats = VALUES(achievedfats);`;
 
-                            const weeklySql =
-                            `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories) 
-                            VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
+    con.query(dailySql, (err, result) => {
+      if (err) {
+        console.error("Error adding daily calories: ", err);
+        res.status(500).send("Internal server error");
+        con.end();
+        return;
+      }
+      console.log("Daily calories added");
+
+      // Add weekly calories
+      const { email: email2, date: date2, totWcals, achWcals } = data2;
+      const weeklySql = `INSERT INTO weekly_calories (email, week_start_date, total_calories, achieved_calories)
+                         VALUES ('${email2}', '${date2}', ${totWcals}, ${achWcals})
+                         ON DUPLICATE KEY UPDATE
+                         total_calories = VALUES(total_calories),
+                         achieved_calories = achieved_calories + ${achWcals};`;
+
+      con.query(weeklySql, (err, result) => {
+        if (err) {
+          console.error("Error adding weekly calories: ", err);
+          res.status(500).send("Internal server error");
+          con.end();
+          return;
+        }
+        console.log("Weekly calories added");
+
+        // Add monthly calories
+        const { email: email3, date: date3, totMcals, achMcals } = data3;
+        const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
+                            VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
                             ON DUPLICATE KEY UPDATE
-                            total_calories =  VALUES(total_calories),
-                            achieved_calories = achieved_calories + ${achWcals};
-                            `;
-   
-         con.query(weeklySql, (err, result) => {
-           if (err) {
-             console.error("Error adding weekly calories: ", err);
-             res.status(500).send("Internal server error");
-             con.end();
-             return;
-           }
-           console.log("Weekly calories added");
-   
-           // Add monthly calories
-           const { email: email3, date: date3, totMcals, achMcals } = data3;
-           const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
-                               VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
-                               ON DUPLICATE KEY UPDATE
-                               total_calories = VALUES(total_calories),
-                               achieved_calories = achieved_calories + ${achMcals}`;
-   
-           con.query(monthlySql, (err, result) => {
-             if (err) {
-               console.error("Error adding monthly calories: ", err);
-               res.status(500).send("Internal server error");
-               con.end();
-               return;
-             }
-             console.log("Monthly calories added");
-   
-             res.send("Calories details added");
-             con.end();
-            });
-          });
+                            total_calories = VALUES(total_calories),
+                            achieved_calories = achieved_calories + ${achMcals}`;
+
+        con.query(monthlySql, (err, result) => {
+          if (err) {
+            console.error("Error adding monthly calories: ", err);
+            res.status(500).send("Internal server error");
+            con.end();
+            return;
+          }
+          console.log("Monthly calories added");
+
+          res.send("Calories details added");
         });
       });
     });
+  });
+
+  // Close the connection outside the callback
+  con.end();
+});
+
+
+
+
+
+
+
 
 
 
@@ -1499,13 +1498,6 @@ app.post("/delcourse", (req, res) => {
 
 
 
-
-
-
-
-
-
-
 app.get("/updatedata", (req, res) => {
   res.send("This is the data endpoint");
   console.log("Received data:");
@@ -1552,9 +1544,6 @@ console.log("tr"+trainerId+"  "+description+"  "+profilePicUrl );
   });
 });
 
-
-
- 
 
 
 
