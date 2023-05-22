@@ -1529,53 +1529,28 @@ app.post("/updatedata", (req, res) => {
   con.connect(function (err) {
     if (err) throw err;
     console.log("Connected! Update data");
-    var sql ="UPDATE trainerdetails SET description='"+description+"',profilepic='"+profilePicUrl+"' WHERE trainerid='" +trainerId+"';";
-   con.query(sql, function (err, result) {
-    if (err) {
 
-
-      con.end();
-    } else {
-      con.end();
-    }
-    // console.log(result[1].name);
+    var sql = "UPDATE trainerdetails SET description = '" + description + "', profilepic = '" + profilePicUrl + "' WHERE trainerid = '" + trainerId + "';";
+    con.query(sql, function (err, result) {
+      if (err) {
+        res.send("0");
+        con.end();
+      } else {
+        var coursesSql = "UPDATE courses SET trainerpic = '" + profilePicUrl + "' WHERE trainerid = '" + trainerId + "';";
+        con.query(coursesSql, function (err, result) {
+          if (err) {
+            res.send("0");
+            con.end();
+          } else {
+            res.send("1");
+            con.end();
+          }
+          console.log("UPDATED DATA IN BOTH TABLES");
+        });
+      }
+    });
   });
-
-  var con = mysql.createConnection({
-    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
-    user: "u6mrp0q6gavsuo3y",
-    password: "BZpgvyXhFUPP21YbYUUR",
-    database: "bsfwn0d48k1k4wkxc8lx",
-  });
-
-  con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected! Update data");
-    var sql ="UPDATE courses SET trainerpic='"+profilePicUrl+"' WHERE trainerid='" +trainerId+"';";
-   con.query(sql, function (err, result) {
-    if (err) {
-      res.send("0");
-
-      con.end();
-    } else {
-      res.send("1");
-      con.end();
-    }
-    console.log("UPDATED DATA IN BOTH TABLES");
-  });
-   
-    
-  });
-
-
-    
-  });
-
-
-
 });
-
-
 
 
 
