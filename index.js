@@ -737,6 +737,12 @@ app.post("/addData", (req, res) => {
   });
 });
 
+
+app.get("/addData2", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
 app.post("/addData2", (req, res) => {
   const { data1, data2, data3 } = req.body;
 
