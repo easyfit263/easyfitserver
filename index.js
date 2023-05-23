@@ -578,26 +578,38 @@ app.post("/addtrainerdetails", (req, res) => {
     if (err) throw err;
     console.log("Connected!");
     var sql =
-      "INSERT INTO trainerdetails (name, email, trainerid, description, phone, password, gender, video, pictures, profilepic) VALUES (" +
-      "'" +
-      n1 +
-      "'," +
-      "'" +
-      n2 +
-      "'," +
-      "'" +
-      n2 +
-      "'," +
-      "'" +
-      n9 +
-      "'," +
-      "'" +
-      n3 +
-      "'," +
-      "'" +
-      n4 +
-      "'," +
-      "'" +n5 + "'," +"'" + n6 +"',"+"'" +n8 + "'," +"'" + n7 +"'" +");";
+  "INSERT INTO trainerdetails (name, email, trainerid, description, phone, password, gender, video, pictures, profilepic) VALUES (" +
+  "'" +
+  n1.replace(/'/g, "''") +
+  "'," +
+  "'" +
+  n2.replace(/'/g, "''") +
+  "'," +
+  "'" +
+  n2.replace(/'/g, "''") +
+  "'," +
+  "+'" +
+  n9.replace(/'/g, "''") +
+  "'," +
+  "'" +
+  n3 +
+  "'," +
+  "'" +
+  n4 +
+  "'," +
+  "'" +
+  n5 +
+  "'," +
+  "'" +
+  n6 +
+  "'," +
+  "'" +
+  n8 +
+  "'," +
+  "'" +
+  n7 +
+  "'" +
+  ");";
 
 
     con.query(sql, function (err, result) {
