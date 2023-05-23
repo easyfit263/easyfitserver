@@ -758,14 +758,14 @@ app.post("/addData2", (req, res) => {
     console.log("Connected!");
 
     // Add daily calories
-    const { email: email1, totalcals, totalprots, totalcarbs, totalfats } = data1;
-    const dailySql = `INSERT INTO daily_totalcals (email, totalcalories, totalproteins, totalcarbs, totalfats)
-                      VALUES ('${email1}', ${totalcals}, ${totalprots}, ${totalcarbs}, ${totalfats})
+    const { email: email1, date: date1, achcals, achprots, achcarbs, achfats } = data1;
+    const dailySql = `INSERT INTO daily_calories (email, date, achievedcal, achievedprots, achievedcarbs, achievedfats)
+                      VALUES ('${email1}', '${date1}', ${achcals}, ${achprots}, ${achcarbs}, ${achfats})
                       ON DUPLICATE KEY UPDATE
-                      totalcalories = VALUES(totalcalories),
-                      totalproteins = VALUES(totalproteins),
-                      totalcarbs = VALUES(totalcarbs),
-                      totalfats = VALUES(totalcarbs);`;
+                      achievedcal = VALUES(achievedcal),
+                      achievedprots = VALUES(achievedprots),
+                      achievedcarbs = VALUES(achievedcarbs),
+                      achievedfats = VALUES(achievedfats);`;
 
     con.query(dailySql, (err, result) => {
       if (err) {
@@ -812,7 +812,7 @@ con.query(monthlySql, (err, result) => {
 
   res.send("Calories details added");
   con.end(); // Close the connection after all queries have completed
-        });
+});
       });
     });
   });
