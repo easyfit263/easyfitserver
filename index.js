@@ -716,21 +716,35 @@ console.log('monthly'+JSON.stringify(monthlyData));
       total_calories = VALUES(total_calories);`;
 
     con.query(dailySql, function (err, result) {
-      if (err) throw err;
-      console.log("Daily Calories Added/Updated");
-      con.end();
+     if (err) {
+      console.log("errror on 732"+err);
+         con.end();
+      };
+       else{console.log("Daily Calories Added/Updated");
+//       con.end();
+           }
     });
 
     con.query(weeklySql, function (err, result) {
-      if (err) throw err;
+      if (err) {
+      console.log("errror on 732"+err);
+         con.end();
+      };
+       else{
       console.log("Weekly Calories Added/Updated");
-      con.end();
+//       con.end();
+       }
     });
 
     con.query(monthlySql, function (err, result) {
-      if (err) throw err;
+      if (err) {
+      console.log("errror on 732"+err);
+         con.end();
+      };
+       else{
       console.log("Monthly Calories Added/Updated");
       con.end();
+       }
     });
 
     res.send("Calories Details Added/Updated");
