@@ -1550,6 +1550,96 @@ app.post("/updatedata", (req, res) => {
   });
 });
 
+app.get("/getTotalCalories", (req, res) => {
+  res.send("This is the data endpoint");
+  console.log("Received data:");
+});
+
+app.post("/getTotalCalories", (req, res) => {
+  const n = req.body.email;
+
+  var mysql = require("mysql");
+
+  var con = mysql.createConnection({
+   host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+    user: "u6mrp0q6gavsuo3y",
+    password: "BZpgvyXhFUPP21YbYUUR",
+    database: "bsfwn0d48k1k4wkxc8lx",
+  });
+
+  const auth = 0;
+  con.connect(function (err) {
+    if (err) throw err;
+    console.log("Connected!");
+
+    var totalCaloriesSql =
+      "SELECT * FROM daily_totalcals WHERE email = '" + n + "';";
+
+    var weeklyCaloriesSql =
+      "SELECT SUM(achieved_calories) AS total_achieved_calories, total_calories " +
+      "FROM weekly_calories " +
+      "WHERE email = '" +
+      n +
+      "' " +
+      "AND week_start_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+      "GROUP BY total_calories " +
+      "ORDER BY week_start_date DESC " +
+      "LIMIT 1;";
+
+    var monthlyCaloriesSql =
+      "SELECT SUM(achieved_calories) AS total_achieved_calories, total_calories " +
+      "FROM monthly_calories " +
+      "WHERE email = '" +
+      n +
+      "' " +
+      "AND month_start_date >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) " +
+      "GROUP BY total_calories " +
+      "ORDER BY month_start_date DESC " +
+      "LIMIT 1;";
+
+    con.query(totalCaloriesSql, function (err, totalResult) {
+      if (err) throw err;
+      if (totalResult.length > 0) {
+        console.log("Total result: " + totalResult);
+        con.query(weeklyCaloriesSql, function (err, weeklyResult) {
+          if (err) throw err;
+          if (weeklyResult.length > 0) {
+            console.log("Weekly result: " + weeklyResult);
+            con.query(monthlyCaloriesSql, function (err, monthlyResult) {
+              if (err) throw err;
+              if (monthlyResult.length > 0) {
+                console.log("Monthly result: " + monthlyResult);
+                res.json({
+                  totalResult: totalResult,
+                  weeklyResult: weeklyResult,
+                  monthlyResult: monthlyResult,
+                });
+              } else {
+                res.json({
+                  totalResult: totalResult,
+                  weeklyResult: weeklyResult,
+                  monthlyResult: "0",
+                });
+              }
+              con.end();
+            });
+          } else {
+            res.json({
+              totalResult: totalResult,
+              weeklyResult: "0",
+              monthlyResult: "0",
+            });
+            con.end();
+          }
+        });
+      } else {
+        res.send("0");
+        con.end();
+      }
+    });
+  });
+});
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
