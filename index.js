@@ -719,7 +719,7 @@ console.log('monthly'+JSON.stringify(monthlyData));
      if (err) {
       console.log("errror on 732"+err);
          con.end();
-      };
+      }
        else{console.log("Daily Calories Added/Updated");
 //       con.end();
            }
@@ -729,7 +729,7 @@ console.log('monthly'+JSON.stringify(monthlyData));
       if (err) {
       console.log("errror on 732"+err);
          con.end();
-      };
+      }
        else{
       console.log("Weekly Calories Added/Updated");
 //       con.end();
@@ -740,7 +740,7 @@ console.log('monthly'+JSON.stringify(monthlyData));
       if (err) {
       console.log("errror on 732"+err);
          con.end();
-      };
+      }
        else{
       console.log("Monthly Calories Added/Updated");
       con.end();
