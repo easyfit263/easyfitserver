@@ -679,7 +679,7 @@ app.post("/addData", (req, res) => {
   const monthlyData = requestData.data3;
 
   var mysql = require("mysql");
-console.log(monthlyData);
+console.log('monthly'+JSON.stringify(monthlyData));
   var con = mysql.createConnection({
     host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
     user: "u6mrp0q6gavsuo3y",
