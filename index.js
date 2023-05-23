@@ -934,7 +934,7 @@ app.get("/dailyCalories", (req, res) => {
 
 app.post("/dailyCalories", (req, res) => {
   const n = req.body.email;
-  var date1 = req.body.formattedDate;
+//   var date1 = req.body.formattedDate;
 
    
    const date = new Date(); // Get the current date
@@ -944,9 +944,9 @@ const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the current m
 const day = String(date.getDate()).padStart(2, '0'); // Get the current day
 
 const formattedDate = `${year}-${month}-${day}`; // Format the date as YYYY-MM-DD
-date1=formattedDate;
+var date1=formattedDate;
    
-   
+   console.log(date1);
    
    
    
