@@ -111,47 +111,47 @@ app.post("/Traineraddtologin", (req, res) => {
   res.send("USER ADDED");
 });
 
-app.get("/trainercheckcredentials", (req, res) => {
-  res.send("This is the data endpoint");
-  console.log("Received data:");
-});
+// app.get("/trainercheckcredentials", (req, res) => {
+//   res.send("This is the data endpoint");
+//   console.log("Received data:");
+// });
 
-app.post("/trainercheckcredentials", (req, res) => {
-  const n = req.body.data1.email;
-  const p = req.body.data1.password;
+// app.post("/trainercheckcredentials", (req, res) => {
+//   const n = req.body.data1.email;
+//   const p = req.body.data1.password;
 
-  // console.log("DATA RECEIVED "+ n);
+//   // console.log("DATA RECEIVED "+ n);
 
-  // SQL STARTS
+//   // SQL STARTS
 
-  var mysql = require("mysql");
+//   var mysql = require("mysql");
 
-  var con = mysql.createConnection({
-    host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
-    user: "u6mrp0q6gavsuo3y",
-    password: "BZpgvyXhFUPP21YbYUUR",
-    database: "bsfwn0d48k1k4wkxc8lx",
-  });
-  const auth = 0;
-  con.connect(function (err) {
-    if (err) throw err;
-    console.log("Connected!");
-    // var sql = "INSERT INTO details (username, name,age, gender, interests, phoneno, country, maritalstat, work, prefferedage, city, religion, caste, height, description, hobbies) VALUES ('pathan77', ' "+a+" ', '', '', '', '', '', '', '', '', '', '', '', '', '','')";
-    var sql =
-      "SELECT * FROM trainerlogin WHERE email= '" + n + "' AND password='" + p + "'";
-    con.query(sql, function (err, result) {
-      if (err) throw err;
-      if (result.length > 0) {
-        res.send("1");
-        con.end();
-      } else {
-        res.send("0");
-        con.end();
-      }
-      // console.log(result[1].name);
-    });
-  });
-});
+//   var con = mysql.createConnection({
+//     host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
+//     user: "u6mrp0q6gavsuo3y",
+//     password: "BZpgvyXhFUPP21YbYUUR",
+//     database: "bsfwn0d48k1k4wkxc8lx",
+//   });
+//   const auth = 0;
+//   con.connect(function (err) {
+//     if (err) throw err;
+//     console.log("Connected!");
+//     // var sql = "INSERT INTO details (username, name,age, gender, interests, phoneno, country, maritalstat, work, prefferedage, city, religion, caste, height, description, hobbies) VALUES ('pathan77', ' "+a+" ', '', '', '', '', '', '', '', '', '', '', '', '', '','')";
+//     var sql =
+//       "SELECT * FROM trainerlogin WHERE email= '" + n + "' AND password='" + p + "'";
+//     con.query(sql, function (err, result) {
+//       if (err) throw err;
+//       if (result.length > 0) {
+//         res.send("1");
+//         con.end();
+//       } else {
+//         res.send("0");
+//         con.end();
+//       }
+//       // console.log(result[1].name);
+//     });
+//   });
+// });
 
 
 // CHECK CREDENTIALS
@@ -446,7 +446,7 @@ app.post("/checktrainercredentials", (req, res) => {
     console.log("Connected!");
     // var sql = "INSERT INTO details (username, name,age, gender, interests, phoneno, country, maritalstat, work, prefferedage, city, religion, caste, height, description, hobbies) VALUES ('pathan77', ' "+a+" ', '', '', '', '', '', '', '', '', '', '', '', '', '','')";
     var sql =
-      "SELECT * FROM login WHERE email= '" +
+      "SELECT * FROM trainerlogin WHERE email= '" +
       n +
       "' AND password='" +
       p +
