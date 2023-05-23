@@ -679,7 +679,7 @@ app.post("/addData", (req, res) => {
   const monthlyData = requestData.data3;
 
   var mysql = require("mysql");
-
+console.log(monthlyData);
   var con = mysql.createConnection({
     host: "bsfwn0d48k1k4wkxc8lx-mysql.services.clever-cloud.com",
     user: "u6mrp0q6gavsuo3y",
@@ -708,6 +708,7 @@ app.post("/addData", (req, res) => {
       total_calories =  VALUES(total_calories);`;
 
     // Insert or update monthly data
+     console.log(monthlyData);
     var monthlySql =
       `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories) 
       VALUES ('${monthlyData.email}', '${monthlyData.date}', ${monthlyData.targetmonthlycal}, ${monthlyData.achCals})
