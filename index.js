@@ -794,31 +794,30 @@ app.post("/addData2", (req, res) => {
         }
         console.log("Weekly calories added");
 
-        // Add monthly calories
-        const { email: email3, date: date3, totMcals, achMcals } = data3;
-        const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
-                            VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
-                            ON DUPLICATE KEY UPDATE
-                            total_calories = VALUES(total_calories),
-                            achieved_calories = achieved_calories + ${achMcals}`;
+      // Add monthly calories
+const { email: email3, date: date3, totMcals, achMcals } = data3;
+const monthlySql = `INSERT INTO monthly_calories (email, month_start_date, total_calories, achieved_calories)
+                    VALUES ('${email3}', '${date3}', ${totMcals}, ${achMcals})
+                    ON DUPLICATE KEY UPDATE
+                    total_calories = VALUES(total_calories),
+                    achieved_calories = achieved_calories + ${achMcals};`;
 
-        con.query(monthlySql, (err, result) => {
-          if (err) {
-            console.error("Error adding monthly calories: ", err);
-            res.status(500).send("Internal server error");
-            con.end(); // Close the connection on error
-            return;
-          }
-          console.log("Monthly calories added");
+con.query(monthlySql, (err, result) => {
+  if (err) {
+    console.error("Error adding monthly calories: ", err);
+    res.status(500).send("Internal server error");
+    con.end(); // Close the connection on error
+    return;
+  }
+  console.log("Monthly calories added");
 
-          res.send("Calories details added");
-          con.end(); // Close the connection after all queries have completed
+  res.send("Calories details added");
+  con.end(); // Close the connection after all queries have completed
         });
       });
     });
   });
 });
-
 
 
 app.get("/totalCalories", (req, res) => {
