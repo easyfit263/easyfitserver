@@ -1540,7 +1540,15 @@ app.post("/updatedata", (req, res) => {
     if (err) throw err;
     console.log("Connected! Update data");
 
-    var sql = "UPDATE trainerdetails SET description = '" + description + "', profilepic = '" + profilePicUrl + "' WHERE trainerid = '" + trainerId + "';";
+   var sql =
+  "UPDATE trainerdetails SET description = '" +
+  description.replace(/'/g, "''") +
+  "', profilepic = '" +
+  profilePicUrl +
+  "' WHERE trainerid = '" +
+  trainerId +
+  "';";
+
     con.query(sql, function (err, result) {
       if (err) {
         res.send("0");
