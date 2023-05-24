@@ -1596,15 +1596,14 @@ app.post("/getTotalCalories", (req, res) => {
       "SELECT * FROM daily_totalcals WHERE email = '" + n + "';";
 
     var weeklyCaloriesSql =
-      "SELECT SUM(achieved_calories) AS total_achieved_calories, total_calories " +
-      "FROM weekly_calories " +
-      "WHERE email = '" +
-      n +
-      "' " +
-      "AND week_start_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
-      "GROUP BY total_calories " +
-      "ORDER BY week_start_date DESC " +
-      "LIMIT 1;";
+  "SELECT SUM(achieved_calories) AS total_achieved_calories, MAX(total_calories) AS total_calories " +
+  "FROM (SELECT achieved_calories, total_calories " +
+  "FROM weekly_calories " +
+  "WHERE email = '" + n + "' " +
+  "AND week_start_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
+  "ORDER BY week_start_date DESC " +
+  "LIMIT 7) AS subquery;";
+
 
     var monthlyCaloriesSql =
       "SELECT SUM(achieved_calories) AS total_achieved_calories, total_calories " +
